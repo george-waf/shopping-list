@@ -1,0 +1,120 @@
+html, body{
+	margin: 0;
+	padding: 0;
+	background: #E8E8E8;
+	font-size: 15px;
+	font-family: 'Roboto Mono', monospace;
+}
+#top-strip{
+	top: 0;
+	position: fixed;
+	height: 5px;
+	background: #FFBB00;
+	width: 100%;
+}
+#sign-up-form{
+	background: #efefef;
+	max-width: 400px;
+	height: 300px;
+	box-shadow: 1px 1px 5px 1px #999;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#sign-up-form form{
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 30px;
+}
+
+#sign-up-form input{
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#sign-up-form button{
+	width: 100%;
+	font-weight: bold;
+	background: #80D8FF;
+	margin-top: 20px;
+	margin-top: 20px;
+}
+#heading h1, h4{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#heading img{
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 100px;
+	display: block;
+}
+
+#already-registered{
+	max-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#already-registered span{
+	display: block;
+	text-align: center;
+}
+#already-registered a{
+	font-size: 20px;
+	color: #A3AEB2;
+}
+
+#dashboard-heading{
+	top: 0;
+	position: fixed;
+	height: 50px;
+	background: #FFBB00;
+	width: 100%;
+	z-index: 10;
+}
+
+#dashboard-heading h1{
+	margin: 10px;
+	display: inline;
+	font-size: 25px;
+}
+
+#dashboard-heading img{
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 40px;
+}
+
+.shopping-list{
+	width: 300px;
+	margin: 20px;
+	background: #80D8FF;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.starter{
+	background: #CFD8DC;
+	width: 400px;
+	height: 50px;
+
+}
+.starter li{
+	height: 50px;
+}
+.lists-container{
+	max-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	top: 50px;
+	position: relative;
+}
