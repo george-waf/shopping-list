@@ -1,9 +1,11 @@
+'''docstring for app'''
 from flask import Flask
-app = Flask(__name__)
+APP = Flask(__name__)
 
-@app.route('/')
+@APP.route('/')
 def hello_world():
+    '''docstring for function'''
     return 'Hello, World!'
 
 if __name__ == "__main__":
-    app.run()
+    APP.run()
