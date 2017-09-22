@@ -49,5 +49,34 @@ class TddInShoppist(unittest.TestCase):
         #test if it returns something
         self.assertEqual(str(response), "<Response streamed [200 OK]>")
 
+    def  test_sh_list_add(self):
+        '''Test if user can add list'''
+        response = self.app.post('/sh_list', data=dict(
+            email="user@shoppist.com",
+            title = "Breakfast",
+            items=["Coffee", "Bacon", "Milk", "Bread"]
+            ))
+        #test if it returns something
+        self.assertEqual(str(response), "<Response streamed [200 OK]>")
+
+    def  test_sh_list_update(self):
+        '''Test if user can update a list'''
+        response = self.app.put('/sh_list', data=dict(
+            email="user@shoppist.com",
+            sh_list_id = 4,
+            title = "Breakfast",
+            items=["Coffee", "Bacon", "Milk", "Bread"]
+            ))
+        #test if it returns something
+        self.assertEqual(str(response), "<Response streamed [200 OK]>")
+
+    def  test_sh_list_delete(self):
+        '''Test if user can add list'''
+        response = self.app.delete('/sh_list', data=dict(
+            sh_list_id = 4
+            ))
+        #test if it returns something
+        self.assertEqual(str(response), "<Response streamed [200 OK]>")
+
 if __name__ == '__main__':
     unittest.main()
