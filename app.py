@@ -11,26 +11,39 @@ def index():
     '''rendering the sign up page'''
     error = None
     if request.method == 'POST':
-        if validate_data(request.form['username'], request.form['password']):
-            return log_the_user_in(request.form['username'])
+        if validate_data(request.form['email'], request.form['password']):
+            return log_the_user_in(request.form['email'])
         else:
-            error = 'Invalid format of username or password'
+            error = 'Invalid format of email or password'
     return render_template('sign-up.html', error=error)
 
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     '''Rendering the login page'''
     error = None
     if request.method == 'POST':
-        if valid_login(request.form['username'], request.form['password']):
-            return log_the_user_in(request.form['username'])
+        if valid_login(request.form['email'], request.form['password']):
+            return log_the_user_in(request.form['email'])
         else:
-            error = 'username or password not correct'
+            error = 'Wrong email or password'
     return render_template('login.html', error=error)
 
 @app.route('/dashboard')
 def dashboard():
     '''Rendering the dashboard page'''
+    return render_template('dashboard.html')
+
+
+def validate_data(email, password):
+    if email and password: return True
+    else: return False
+
+def valid_login(email, password):
+    if email == "user@shoppist.com" and password == "qwerty":
+        return True
+    else: return False
+
+def log_the_user_in(email):
     return render_template('dashboard.html')
 
 if __name__ == "__main__":
