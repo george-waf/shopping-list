@@ -16,6 +16,9 @@
 		<h4>Sign in</h4>
 	</div>
 	<div id="sign-up-form">
+			{% if error %}
+			<span>Error: {{ error }}!</span>
+			{% endif %}
 		<form role="form">
 			<div class="form-group">
 				<input type="text" name="email" placeholder="Your email address">
