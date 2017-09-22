@@ -3,6 +3,7 @@
 # Shopping List App
 A shopping list app that helps users track and share lists of things they want to spend there money on.
 It is made using the Flask framework, python.
+You can find the app online [here](https://shoppist.herokuapp.com)
 
 ## Installation and Usage
 * Clone the repo
