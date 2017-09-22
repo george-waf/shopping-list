@@ -25,6 +25,12 @@ class TddInShoppist(unittest.TestCase):
         #test if it returns something
         self.assertEqual(str(response), "<Response streamed [200 OK]>")
 
+    def test_get_logout(self):
+        '''Test access to the GET 'sign-up/' route'''
+        response = self.app.get('/logout', follow_redirects=True)
+        #test if it returns something
+        self.assertEqual(str(response), "<Response streamed [200 OK]>")
+
     def  test_post_sign_up(self):
         '''Test if user can sign up'''
         response = self.app.post('/sign-up', data=dict(
