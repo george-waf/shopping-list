@@ -45,11 +45,10 @@ def logout():
 @app.route('/dashboard')
 def dashboard():
     '''Rendering the dashboard page'''    
-    if session.get("logged_in"):
-        a_user = user.user(session["email"], session["password"])
-        return render_template('dashboard.html')
-    else:
-        return redirect(url_for('login'))
+    verify_user_is_logged_in()
+    a_user = user.user(session["email"], session["password"])
+    return render_template('dashboard.html')
+        
 
 def validate_data(email, password):
     '''validate if email and password are valid'''
@@ -66,6 +65,21 @@ def log_the_user_in(a_user):
     '''take the user to there dashboard'''
     session["logged_in"] = True
     return redirect(url_for('dashboard'))
+
+def verify_user_is_logged_in():
+    if not session.get("logged_in"):
+        return redirect(url_for('login'))
+
+@app.route('/sh_list', methods = ['POST', 'PUT', 'DELETE'])
+def add_sh_list():
+    '''add a new shopping list'''   
+    verify_user_is_logged_in()
+    if request.method == 'POST':
+        return "added list"
+    elif request.method == 'PUT':
+        return "updated list"
+    elif request.method == 'DELETE':
+        return "deleted list"
 
 
 app.secret_key = 'A0Zr98j/3yX Q~XHH!jmN]LWX/,?RT'
