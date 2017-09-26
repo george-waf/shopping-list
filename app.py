@@ -1,8 +1,10 @@
 '''docstring for app'''
 from flask import Flask, session, render_template, request, url_for, redirect
 from models import user
+import sys
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route('/')
 @app.route('/sign-up', methods=['POST', 'GET'])
@@ -11,11 +13,9 @@ def index():
     error = None
     if request.method == 'POST':
         if validate_data(request.form['email'], request.form['password']):
-            a_user = user.user(request.form['email'], request.form['password'])
-            #store user in session
-            session["email"] = a_user.email
-            session["password"] = a_user.password
-            return log_the_user_in(a_user)
+            new_user = user.user(request.form['email'], request.form['password'])
+            user.add_user(new_user)
+            return redirect(url_for('login'))
         else:
             error = 'Invalid format of email or password'
     return render_template('sign-up.html', error=error)
@@ -25,13 +25,9 @@ def login():
     '''Rendering the login page'''
     error = None
     if request.method == 'POST':
-        if valid_login(request.form['email'], request.form['password']):
-            #creeate a new user
-            a_user = user.user(request.form['email'], request.form['password'])
-            #store user in session
-            session["email"] = a_user.email
-            session["password"] = a_user.password
-            return log_the_user_in(a_user)
+        valid_user = validate_login(request.form['email'], request.form['password'])
+        if valid_user:
+            return log_the_user_in(valid_user)
         else:
             error = 'Wrong email or password'
     return render_template('login.html', error=error)
@@ -39,6 +35,7 @@ def login():
 @app.route('/logout')
 def logout():
     '''Rendering the logout page'''
+    session["logged_in"] = False
     session.clear()
     return redirect(url_for('login'))
 
@@ -46,7 +43,6 @@ def logout():
 def dashboard():
     '''Rendering the dashboard page'''    
     verify_user_is_logged_in()
-    a_user = user.user(session["email"], session["password"])
     return render_template('dashboard.html')
         
 
@@ -55,18 +51,17 @@ def validate_data(email, password):
     if email and password: return True
     else: return False
 
-def valid_login(email, password):
+def validate_login(email, password):
     '''check if user exists in system'''
-    if email == "user@shoppist.com" and password == "qwerty":
-        return True
-    else: return False
+    return next((obj for obj in user.get_all_users() if obj.email == email and obj.password == password), None)
 
 def log_the_user_in(a_user):
     '''take the user to there dashboard'''
+    session["email"] = a_user.email
     session["logged_in"] = True
     return redirect(url_for('dashboard'))
 
-def verify_user_is_logged_in():
+def verify_user_is_logged_in(): 
     if not session.get("logged_in"):
         return redirect(url_for('login'))
 
