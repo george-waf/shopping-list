@@ -10,15 +10,20 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 @app.route('/sign-up', methods=['POST', 'GET'])
 def index():
     '''rendering the sign up page'''
-    error = None
+    some_error = None
     if request.method == 'POST':
-        if validate_data(request.form['username'], request.form['email'], request.form['password']):
+        some_error = validate_data(request.form['username'],
+            request.form['email'],
+            request.form['password'],
+            request.form['confirm_password'])
+        if not some_error:
             new_user = user.user(request.form['username'], request.form['email'], request.form['password'])
             user.add_user(new_user)
             return redirect(url_for('login'))
         else:
-            error = 'Invalid format of email or password'
-    return render_template('sign-up.html', error=error)
+            return render_template('sign-up.html', error=some_error)
+    elif request.method == 'GET':
+        return render_template('sign-up.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -45,10 +50,14 @@ def dashboard():
     return render_template('dashboard.html')
         
 
-def validate_data(username, email, password):
+def validate_data(username, email, password, confirm_password):
     '''validate if email and password are valid'''
-    if username and email and password: return True
-    else: return False
+    if not (username and email and password and confirm_password):
+        return "Invalid format of username, email or password"
+    elif password != confirm_password:
+        return "Passwords do not match"
+    else:
+        return None
 
 def validate_login(email, password):
     '''check if user exists in system'''
