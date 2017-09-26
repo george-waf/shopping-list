@@ -35,7 +35,6 @@ def login():
 @app.route('/logout')
 def logout():
     '''Rendering the logout page'''
-    session["logged_in"] = False
     session.clear()
     return redirect(url_for('login'))
 
@@ -61,7 +60,7 @@ def log_the_user_in(a_user):
     session["logged_in"] = True
     return redirect(url_for('dashboard'))
 
-def verify_user_is_logged_in(): 
+def verify_user_is_logged_in():
     if not session.get("logged_in"):
         return redirect(url_for('login'))
 
