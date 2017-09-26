@@ -12,8 +12,8 @@ def index():
     '''rendering the sign up page'''
     error = None
     if request.method == 'POST':
-        if validate_data(request.form['email'], request.form['password']):
-            new_user = user.user(request.form['email'], request.form['password'])
+        if validate_data(request.form['username'], request.form['email'], request.form['password']):
+            new_user = user.user(request.form['username'], request.form['email'], request.form['password'])
             user.add_user(new_user)
             return redirect(url_for('login'))
         else:
@@ -45,9 +45,9 @@ def dashboard():
     return render_template('dashboard.html')
         
 
-def validate_data(email, password):
+def validate_data(username, email, password):
     '''validate if email and password are valid'''
-    if email and password: return True
+    if username and email and password: return True
     else: return False
 
 def validate_login(email, password):

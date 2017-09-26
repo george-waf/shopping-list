@@ -38,6 +38,7 @@ class TddInShoppist(unittest.TestCase):
     def  test_post_sign_up(self):
         '''Test if user can sign up'''
         response = self.app.post('/sign-up', data=dict(
+            username="joshua",
             email="user@shoppist.com",
             password="qwerty"
             ), follow_redirects=True)
@@ -46,6 +47,7 @@ class TddInShoppist(unittest.TestCase):
         self.assertIn('<title>Shoppist - Login</title>', str(response.data))
         #Test with empty fields
         response = self.app.post('/sign-up', data=dict(
+            username="",
             email="",
             password=""
             ), follow_redirects=True)
@@ -55,6 +57,7 @@ class TddInShoppist(unittest.TestCase):
     def  test_post_login(self):
         '''Test if user can login'''
         response = self.app.post('/sign-up', data=dict(
+            username="joshua",
             email="user@shoppist.com",
             password="qwerty"
             ), follow_redirects=True)
