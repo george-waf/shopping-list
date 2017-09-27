@@ -1,22 +1,23 @@
-class user(object):
+'''module for handling users'''
+
+
+class User(object):
     """docstring for user"""
-    def __init__(self, email, password, sh_lists = None):
-        super(user, self).__init__()
+
+    def __init__(self, username, email, password, shopping_lists=[]):
         self.email = email
         self.password = password
-        self.sh_lists = sh_lists
+        self.username = username
+        self.shopping_lists = shopping_lists
 
-    def get(self):
-        pass
+ALL_USERS = []
 
-    def add():
-        pass
-        
-    def delete(self):
-        pass
 
-    def update():
-        pass
+def add_user(user):
+    '''add a new user to the list'''
+    ALL_USERS.append(user)
+
 
 def get_all_users():
-        pass
+    '''return a list of all users'''
+    return ALL_USERS
