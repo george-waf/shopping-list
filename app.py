@@ -1,6 +1,7 @@
 '''docstring for APP'''
 from flask import Flask, session, render_template, request, url_for, redirect
 from models import user
+import sys
 
 APP = Flask(__name__)
 APP.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -10,19 +11,23 @@ APP.config['TEMPLATES_AUTO_RELOAD'] = True
 @APP.route('/sign-up', methods=['POST', 'GET'])
 def index():
     '''rendering the sign up page'''
-    some_error = None
+    error = None
     if request.method == 'POST':
-        some_error = validate_data(request.form['username'],
-                                   request.form['email'],
-                                   request.form['password'],
-                                   request.form['confirm_password'])
-        if not some_error:
-            new_user = user.User(request.form['username'],
-                                 request.form['email'],
-                                 request.form['password'])
-            user.add_user(new_user)
-            return redirect(url_for('login'))
-        return render_template('sign-up.html', error=some_error)
+        error = validate_data(request.form['username'],
+                              request.form['email'],
+                              request.form['password'],
+                              request.form['confirm_password'])
+        if not error:
+            error = verify_user_data_is_unique(
+                request.form['username'], request.form['email'])
+        if error:
+            return render_template('sign-up.html', error=error)
+        new_user = user.User(request.form['username'],
+                             request.form['email'],
+                             request.form['password'])
+        user.add_user(new_user)
+        return redirect(url_for('login'))
+
     elif request.method == 'GET':
         return render_template('sign-up.html')
 
@@ -64,10 +69,20 @@ def validate_data(username, email, password, confirm_password):
     return None
 
 
+def verify_user_data_is_unique(username, email):
+    if any(user.username == username for user in user.get_all_users()):
+        return "That username is already taken"
+    if any(user.email == email for user in user.get_all_users()):
+        return "Another user is already using that email"
+    return None
+
+
 def validate_login(email, password):
     '''check if user exists in system and return the user object'''
-    return next((obj for obj in user.get_all_users()
-                 if obj.email == email and obj.password == password), None)
+    for each_user in user.get_all_users():
+        if each_user.email == email and each_user.password == password:
+            return each_user
+    return None
 
 
 def log_the_user_in(a_user):

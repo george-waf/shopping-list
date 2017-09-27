@@ -35,16 +35,21 @@ class TddInShoppist(unittest.TestCase):
         # test if it returns something
         self.assertEqual(response.status_code, 200)
 
-    def test_post_sign_up(self):
+    def test_sign_up_and_login(self):
+        self.post_sign_up()
+        self.post_login()
+        self.post_logout()
+
+    def post_sign_up(self):
         '''Test if user can sign up'''
         response = self.app.post('/sign-up', data=dict(
             username="joshua",
-            email="user@shoppist.com",
+            email="joshua@shoppist.com",
             password="qwerty",
             confirm_password="qwerty"
         ), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        # tests if it redirects to login
+        # tests if it redirects to login- then user is signed up
         self.assertIn('<title>Shoppist - Login</title>', str(response.data))
         # Test with empty fields
         response = self.app.post('/sign-up', data=dict(
@@ -55,27 +60,36 @@ class TddInShoppist(unittest.TestCase):
         ), follow_redirects=True)
         self.assertIn('Invalid format of username, email or password',
                       str(response.data))
-
         # test that confirm password is working
         response = self.app.post('/sign-up', data=dict(
             username="joshua",
-            email="user@shoppist.com",
+            email="joshua@shoppist.com",
             password="qwerty",
             confirm_password="12345"
         ), follow_redirects=True)
-        # tests if it redirects to login
         self.assertIn('Passwords do not match', str(response.data))
-
-    def test_post_login(self):
-        '''Test if user can login'''
+        # test that email has to be unique
         response = self.app.post('/sign-up', data=dict(
-            username="joshua",
-            email="user@shoppist.com",
+            username="morande",
+            email="joshua@shoppist.com",
             password="qwerty",
             confirm_password="qwerty"
         ), follow_redirects=True)
+        self.assertIn('Another user is already using that email',
+                      str(response.data))
+        # test that username has to be unique
+        response = self.app.post('/sign-up', data=dict(
+            username="joshua",
+            email="jack@shoppist.com",
+            password="qwerty",
+            confirm_password="qwerty"
+        ), follow_redirects=True)
+        self.assertIn('That username is already taken', str(response.data))
+
+    def post_login(self):
+        '''Test if user can login'''
         response = self.app.post('/login', data=dict(
-            email="user@shoppist.com",
+            email="joshua@shoppist.com",
             password="qwerty"
         ), follow_redirects=True)
         # test if it returns something
@@ -85,7 +99,7 @@ class TddInShoppist(unittest.TestCase):
                       str(response.data))
         # test with wrong password
         response = self.app.post('/login', data=dict(
-            email="user@shoppist.com",
+            email="joshua@shoppist.com",
             password="12345"
         ), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
@@ -93,24 +107,25 @@ class TddInShoppist(unittest.TestCase):
         self.assertIn('Wrong email or password', str(response.data))
         # test with wrong email
         response = self.app.post('/login', data=dict(
-            email="riceman@shoppist.com",
+            email="superman@shoppist.com",
             password="qwerty"
         ), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         # test login fails
         self.assertIn('Wrong email or password', str(response.data))
 
-    def test_post_logout(self):
+    def post_logout(self):
         '''Test if user can login'''
         response = self.app.get('/logout', follow_redirects=True)
+        self.assertIn('<title>Shoppist - Login</title>', str(response.data))
         response = self.app.get('/dashboard', follow_redirects=True)
-        # test if it redirects to login - user not logged in
+        # test if it redirects to login - if user not logged in
         #self.assertIn('<title>Shoppist - Login</title>', str(response.data))
 
     def test_sh_list_add(self):
         '''Test if user can add list'''
         response = self.app.post('/sh_list', data=dict(
-            email="user@shoppist.com",
+            email="joshua@shoppist.com",
             title="Breakfast",
             items=["Coffee", "Bacon", "Milk", "Bread"]
         ))
