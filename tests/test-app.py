@@ -10,35 +10,45 @@ class TddInShoppist(unittest.TestCase):
         app.APP.testing = True
         self.app = app.APP.test_client()
 
-    def test_get_root_route(self):
+    def test_app(self):
+        '''Test the app in this order'''
+        self.get_root_route()
+        self.get_sign_up()
+        self.get_login()
+        self.get_logout()
+        self.post_sign_up()
+        self.post_login()
+        self.shopping_list_add()
+        # self.shopping_list_get()
+        # self.shopping_list_get_all()
+        # self.shopping_list_update()
+        # self.shopping_list_delete()
+        self.post_logout()
+
+    def get_root_route(self):
         '''Test access to the GET '/' route'''
         response = self.app.get('/')
         # test if it returns something
         self.assertEqual(response.status_code, 200)
 
-    def test_get_sign_up(self):
+    def get_sign_up(self):
         '''Test access to the GET 'sign-up/' route'''
         response = self.app.get('/sign-up')
         # test if it returns something
         self.assertEqual(response.status_code, 200)
         # test if it signs-up
 
-    def test_get_login(self):
+    def get_login(self):
         '''Test access to the GET 'sign-up/' route'''
         response = self.app.get('/login')
         # test if it returns something
         self.assertEqual(response.status_code, 200)
 
-    def test_get_logout(self):
+    def get_logout(self):
         '''Test access to the GET 'sign-up/' route'''
         response = self.app.get('/logout', follow_redirects=True)
         # test if it returns something
         self.assertEqual(response.status_code, 200)
-
-    def test_sign_up_and_login(self):
-        self.post_sign_up()
-        self.post_login()
-        self.post_logout()
 
     def post_sign_up(self):
         '''Test if user can sign up'''
@@ -121,14 +131,6 @@ class TddInShoppist(unittest.TestCase):
         response = self.app.get('/dashboard', follow_redirects=True)
         # test if it redirects to login - if user not logged in
         #self.assertIn('<title>Shoppist - Login</title>', str(response.data))
-
-    def test_shopping_list(self):
-        self.post_login()
-        self.shopping_list_add()
-        self.shopping_list_get()
-        self.shopping_list_get_all()
-        self.shopping_list_update()
-        self.shopping_list_delete()
 
     def shopping_list_add(self):
         '''Test if user can add list'''
