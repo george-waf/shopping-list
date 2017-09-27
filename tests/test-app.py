@@ -122,34 +122,47 @@ class TddInShoppist(unittest.TestCase):
         # test if it redirects to login - if user not logged in
         #self.assertIn('<title>Shoppist - Login</title>', str(response.data))
 
-    def test_sh_list_add(self):
+    def test_shopping_list(self):
+        self.post_login()
+        self.shopping_list_add()
+        self.shopping_list_get()
+        self.shopping_list_get_all()
+        self.shopping_list_update()
+        self.shopping_list_delete()
+
+    def shopping_list_add(self):
         '''Test if user can add list'''
-        response = self.app.post('/sh_list', data=dict(
-            email="joshua@shoppist.com",
-            title="Breakfast",
+        response = self.app.post('/shopping_list', data=dict(
             items=["Coffee", "Bacon", "Milk", "Bread"]
         ))
-        # test if it returns something
-        self.assertEqual(response.status_code, 200)
+        # test if it returns 201
+        self.assertEqual(response.status_code, 201)
 
-    def test_sh_list_update(self):
-        '''Test if user can update a list'''
-        response = self.app.put('/sh_list', data=dict(
-            email="user@shoppist.com",
-            sh_list_id=4,
-            title="Breakfast",
-            items=["Coffee", "Bacon", "Milk", "Bread"]
-        ))
-        # test if it returns something
-        self.assertEqual(response.status_code, 200)
+    # def shopping_list_get_all(self):
+    #     response = self.app.get('/shopping_list')
+    #      # test if it returns 200 OK
+    #     self.assertEqual(response.status_code, 200)
 
-    def test_sh_list_delete(self):
-        '''Test if user can add list'''
-        response = self.app.delete('/sh_list', data=dict(
-            sh_list_id=4
-        ))
-        # test if it returns something
-        self.assertEqual(response.status_code, 200)
+    # def shopping_list_get(self):
+    #     response = self.app.get('/shopping_list/<id:int>')
+    #      # test if it returns 200 OK
+    #     self.assertEqual(response.status_code, 200)
+
+    # def shopping_list_update(self):
+    #    '''Test if user can add list'''
+    #     response = self.app.post('/shopping_list', data=dict(
+    #         items=["Coffee", "Bacon", "Milk", "Bread"]
+    #     ))
+    #     # test if it returns 201
+    #     self.assertEqual(response.status_code, 201)
+
+    # def shopping_list_delete(self):
+    #     '''Test if user can add list'''
+    #     response = self.app.delete('/shopping_list', data=dict(
+    #         shopping_list_id=4
+    #     ))
+    #     # test if it returns something
+    #     self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()
