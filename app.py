@@ -107,7 +107,7 @@ def add_item():
             request.form['name'],
             request.form['done'])
         item.add_item(new_item)
-        resp = Response(response=new_item.id, status=201)
+        resp = Response(response=str(new_item.id), status=201, content_type="text/plain")
         return resp
     elif request.method == 'PUT':
         return "updated list"

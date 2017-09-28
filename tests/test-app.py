@@ -1,6 +1,7 @@
 import unittest
 import app
 from flask import url_for
+import sys
 
 
 class TddInShoppist(unittest.TestCase):
@@ -140,6 +141,7 @@ class TddInShoppist(unittest.TestCase):
             done=False))
         # test if it returns 201
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(int(response.data), 1)
 
     # def shopping_list_add(self):
     #     '''Test if user can add list'''
