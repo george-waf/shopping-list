@@ -1,7 +1,6 @@
 '''docstring for APP'''
-from flask import Flask, session, render_template, request, url_for, redirect
-from models import user
-import sys
+from flask import Flask, session, render_template, request, url_for, redirect, Response
+from models import user, shopping_list, item
 
 APP = Flask(__name__)
 APP.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -85,9 +84,9 @@ def validate_login(email, password):
     return None
 
 
-def log_the_user_in(a_user):
+def log_the_user_in(user):
     '''take the user to there dashboard'''
-    session["email"] = a_user.email
+    session["email"] = user.email
     session["logged_in"] = True
     return redirect(url_for('dashboard'))
 
@@ -96,19 +95,49 @@ def verify_user_is_logged_in():
     '''check if the user id logged in, if not redirect to login'''
     if not session.get("logged_in"):
         return redirect(url_for('login'))
+    return user.get_user_by_email(session['email'])
 
 
-@APP.route('/sh_list', methods=['POST', 'PUT', 'DELETE'])
-def add_sh_list():
+@APP.route('/item', methods=['POST', 'PUT', 'DELETE'])
+def add_item():
     '''add a new shopping list'''
     verify_user_is_logged_in()
     if request.method == 'POST':
-        return "added list"
+        new_item = item.Item(
+            request.form['name'],
+            request.form['done'])
+        item.add_item(new_item)
+        resp = Response(response=new_item.id, status=201)
+        return resp
     elif request.method == 'PUT':
         return "updated list"
     elif request.method == 'DELETE':
         return "deleted list"
 
+
+@APP.route('/shopping_list', methods=['POST', 'PUT', 'DELETE'])
+def add_shopping_list():
+    '''add a new shopping list'''
+    user = verify_user_is_logged_in()
+    if request.method == 'POST':
+        new_shopping_list = shopping_list.ShoppingList(
+            request.form['title'],
+            make_item_objects_list(request.form['items']), user)
+        user.add_shopping_list(new_shopping_list)
+        shopping_list.add_shopping_list(new_shopping_list)
+        resp = Response(response=new_shopping_list.id, status=201)
+        return resp
+    elif request.method == 'PUT':
+        return "updated list"
+    elif request.method == 'DELETE':
+        return "deleted list"
+
+
+def make_item_objects_list(dict_of_items):
+    item_objects = []
+    for item_name, done in list_of_items.items():
+        item_objects.append(item.Item(item_name, done))
+    return item_objects
 
 APP.secret_key = 'B0ZR98j/3yX Q~XHH!jmN]LWX/,?IU'
 
