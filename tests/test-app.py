@@ -18,7 +18,8 @@ class TddInShoppist(unittest.TestCase):
         self.get_logout()
         self.post_sign_up()
         self.post_login()
-        self.shopping_list_add()
+        self.item_add()
+        #self.shopping_list_add()
         # self.shopping_list_get()
         # self.shopping_list_get_all()
         # self.shopping_list_update()
@@ -132,13 +133,22 @@ class TddInShoppist(unittest.TestCase):
         # test if it redirects to login - if user not logged in
         #self.assertIn('<title>Shoppist - Login</title>', str(response.data))
 
-    def shopping_list_add(self):
+    def item_add(self):
         '''Test if user can add list'''
-        response = self.app.post('/shopping_list', data=dict(
-            items=["Coffee", "Bacon", "Milk", "Bread"]
-        ))
+        response = self.app.post('/item', data=dict(
+            name="Coffee",
+            done=False))
         # test if it returns 201
         self.assertEqual(response.status_code, 201)
+
+    # def shopping_list_add(self):
+    #     '''Test if user can add list'''
+    #     response = self.app.post('/shopping_list', data=dict(
+    #         title="Tomorrows breakfast",
+    #         items = []
+    #     ))
+    #     # test if it returns 201
+    #     self.assertEqual(response.status_code, 201)
 
     # def shopping_list_get_all(self):
     #     response = self.app.get('/shopping_list')
